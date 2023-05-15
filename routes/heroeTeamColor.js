@@ -15,8 +15,7 @@ const router = Router();
 
 router.post( '/',
     [
-        check('id_heroe', 'El id_heroe es obligatorio').not().isEmpty(),
-        check('color', 'El color es obligatorio').not().isEmpty(),
+        
         validarCampos,
     ], 
     crearHeroeTeamColor 
@@ -25,7 +24,7 @@ router.post( '/',
 router.put( '/:id',
     [
         
-        check('color', 'El color es obligatorio').not().isEmpty(),
+        
         validarCampos,
     ],
     actualizarHeroeTeamColor

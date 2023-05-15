@@ -20,21 +20,19 @@ const getHeroes = async(req, res = response) => {
                +'&apikey='+apikey
     console.log(req.params);
     await axios.get(url)
-    .then( async res => {        
-      const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-     
-     
+    .then( async res => {          
       const {offset,limit,total,count}=res.data.data
       data.status= true
       data.limit=limit
-      data.page=Number(req.params.page)
+      data.nextPage=Number(req.params.page)+1
+      data.page=Number(req.params.page)>0? Number(req.params.page)+1:1
+      data.beforePage=Number(req.params.page)>0? Number(req.params.page)-1:0
       data.total=total
+      data.totalPages=Math.trunc(total/limit)+1
       data.count=count
       data.offset=offset
       data.heroes=[]
-      const results = res.data.data.results
-
-     
+      const results = res.data.data.results     
     for (let i = 0; i < results.length; i++) {
       const heroe = {
         "id":results[i].id,
@@ -44,21 +42,14 @@ const getHeroes = async(req, res = response) => {
         "thumbnail":results[i].thumbnail,
         "resourceURI":results[i].resourceURI,
         "teamColor": ""
-        } 
-        
-       
+        }       
         const  heroeTeamColor  = await HeroeTeamColor.find({ id_heroe: results[i].id });
-        
         if (heroeTeamColor.length > 0) {
           heroe.teamColor= heroeTeamColor[0].color
         }
-
         data.heroes.push( heroe );
-        
     }
-   
     }).then(()=>{
-     
       res.json({
           data
       }) 
@@ -70,13 +61,11 @@ const getHeroes = async(req, res = response) => {
         data
     })
     });
-    
 }
 const getHeroeById = async(req, res = response) => {
   const id = req.params.id;
   let heroe= []
   let data = {}
- 
   const url =apiUrl+'characters/'+id+'?ts='+ts+'&hash='+hash
              +'&apikey='+apikey
              console.log("getHeroeById======================");
@@ -95,20 +84,14 @@ const getHeroeById = async(req, res = response) => {
           "resourceURI":results[i].resourceURI,
           "teamColor": ""
           } 
-          
-         
           const  heroeTeamColor  = await HeroeTeamColor.find({ id_heroe: results[i].id });
           
           if (heroeTeamColor.length > 0) {
             heroe.teamColor= heroeTeamColor[0].color
           }
-  
           data.heroe.push( heroe );
-          
       }
-    
     })
-  
   res.json({
     data
 })  
