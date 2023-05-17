@@ -7,7 +7,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 
-const {  crearHeroeTeamColor, actualizarHeroeTeamColor } = require('../controllers/heroeTeamColor');
+const {  crearHeroeTeamColor, actualizarHeroeTeamColor,deleteHeroeTeamColor } = require('../controllers/heroeTeamColor');
 
 const router = Router();
 
@@ -28,6 +28,9 @@ router.put( '/:id',
         validarCampos,
     ],
     actualizarHeroeTeamColor
+);
+router.delete( '/:id',
+    deleteHeroeTeamColor
 );
 
 
